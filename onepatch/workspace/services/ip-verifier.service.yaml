@@ -1,0 +1,10 @@
+# kit-version: 1
+role: Provides advisory IP reputation enrichment to auth-service.
+tier: 2
+telemetry:
+  service_name: ip-verifier
+  environments: [demo]
+repos: [1patch/clerk-demo-09100001]
+tags: [http]
+monitors: []
+depends_on: []

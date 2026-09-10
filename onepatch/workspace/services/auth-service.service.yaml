@@ -1,0 +1,10 @@
+# kit-version: 1
+role: Handles OAuth callbacks, checks advisory IP reputation, and persists sessions.
+tier: 1
+telemetry:
+  service_name: auth-service
+  environments: [demo]
+repos: [1patch/clerk-demo-09100001]
+tags: [http]
+monitors: [post-deploy-regression]
+depends_on: [ip-verifier]

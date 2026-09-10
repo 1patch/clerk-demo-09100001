@@ -1,0 +1,5 @@
+{
+  "phase": "baseline",
+  "timeoutMs": 1000,
+  "fallbackOnTimeout": true
+}
