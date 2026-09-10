@@ -1,11 +1,5 @@
 import { createHash } from 'node:crypto';
 
-export const RELEASES = Object.freeze({
-  baseline: { phase: 'baseline', timeoutMs: 1000, fallbackOnTimeout: true },
-  regression: { phase: 'regression', timeoutMs: 150, fallbackOnTimeout: false },
-  fix: { phase: 'fix', timeoutMs: 500, fallbackOnTimeout: true },
-});
-
 // Permutation spreads the fixed population across a run without random drift.
 // Every 1,000 requests: four dependency failures, 183 slow successes, 813 fast successes.
 export function profileForSample(sampleIndex) {
@@ -74,16 +68,4 @@ export function buildRequestTelemetry({ sampleIndex, release, releaseSha, runId,
     scopeSpans: [{ scope: { name: 'clerk-demo', version: '1.0.0' }, spans }],
   });
   return { resourceSpans: [resource('auth-service', authSpans), resource('ip-verifier', verifierSpans)] };
-}
-
-export function buildHistoricalTelemetry({ phase, release = RELEASES[phase], releaseSha, runId, startTimeMs, sampleCount = 1000, intervalMs = 1000 }) {
-  if (!release) throw new Error('Unknown release phase');
-  if (!Number.isSafeInteger(sampleCount) || sampleCount < 1 || sampleCount > 100000) throw new Error('sampleCount must be between 1 and 100000');
-  const resourceSpans = [];
-  for (let sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++) {
-    const payload = buildRequestTelemetry({ sampleIndex, release, releaseSha, runId, startTimeMs: startTimeMs + sampleIndex * intervalMs });
-    if (!resourceSpans.length) resourceSpans.push(...payload.resourceSpans);
-    else payload.resourceSpans.forEach((resource, index) => resourceSpans[index].scopeSpans[0].spans.push(...resource.scopeSpans[0].spans));
-  }
-  return { resourceSpans };
 }
