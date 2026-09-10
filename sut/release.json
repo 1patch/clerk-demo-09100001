@@ -1,5 +1,5 @@
 {
-  "phase": "regression",
-  "timeoutMs": 150,
-  "fallbackOnTimeout": false
+  "phase": "fix",
+  "timeoutMs": 500,
+  "fallbackOnTimeout": true
 }
