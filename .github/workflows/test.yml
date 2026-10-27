@@ -1,12 +1,18 @@
 name: Service tests
 on:
   push:
+    branches: [main]
   pull_request:
 permissions:
   contents: read
+# Superseded automatic checks can stop; explicit manual runs stay independent.
+concurrency:
+  group: ci-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
